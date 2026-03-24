@@ -21,12 +21,16 @@ app.use('/api/flights',  require('./routes/flights'));
 app.use('/api/bookings', require('./routes/bookings'));
 
 app.get('/api/health', (_, res) => res.json({ status: 'OK', app: 'SkyBook API ✈', version: '2.0' }));
-
+app.get('/', (req, res) => {
+  res.send('SkyBook API is running 🚀');
+});
 // Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Internal server error' });
 });
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
