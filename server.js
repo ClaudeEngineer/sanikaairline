@@ -16,8 +16,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
-    // 'https://skyflightsbooking.netlify.app', // 👈 your frontend URL
-    'https://sanikaairline.onrender.com' // 👈 your frontend URL
+    'https://skkyflights.netlify.app/',
   ],
   credentials: true,
 }));
