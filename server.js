@@ -16,7 +16,8 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
-    'https://skkyflights.netlify.app/',
+   'https://skyflightsbooking.netlify.app', 
+    'https://skkyflights.netlify.app/'
   ],
   credentials: true,
 }));
