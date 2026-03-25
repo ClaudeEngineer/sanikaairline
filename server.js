@@ -8,45 +8,60 @@ const app = express();
 
 connectDB();
 
-// app.use(cors({
-//   origin: ['http://localhost:3000', 'http://localhost:5173'],
-//   credentials: true,
-// }));
+// ✅ Allowed Frontend Origins
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'https://skyflightsbooking.netlify.app',
+  'https://skkyflights.netlify.app'
+];
+
+// ✅ CORS Setup (FINAL FIX)
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-   'https://skyflightsbooking.netlify.app', 
-    'https://skkyflights.netlify.app/'
-  ],
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow Postman / mobile apps
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      console.log("❌ Blocked by CORS:", origin);
+      return callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
-// app.use(cors({
-//   origin: process.env.CLIENT_URL,
-//   credentials: true
-// }));
+
+// ✅ Handle Preflight Requests (VERY IMPORTANT)
+app.options('*', cors());
+
+// ✅ Body Parsers
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// ✅ Routes
 app.use('/api/auth',     require('./routes/auth'));
 app.use('/api/flights',  require('./routes/flights'));
 app.use('/api/bookings', require('./routes/bookings'));
 
-app.get('/api/health', (_, res) => res.json({ status: 'OK', app: 'SkyBook API ✈', version: '2.0' }));
+// ✅ Health Check
+app.get('/api/health', (_, res) => {
+  res.json({ status: 'OK', app: 'SkyBook API ✈', version: '2.0' });
+});
+
+// ✅ Root Route
 app.get('/', (req, res) => {
   res.send('SkyBook API is running 🚀');
 });
-// Global error handler
+
+// ✅ Global Error Handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Internal server error' });
+  console.error("🔥 Error:", err.message);
+  res.status(500).json({ message: err.message || 'Internal server error' });
 });
 
-
-
+// ✅ Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`\n🚀 SkyBook API running → http://localhost:${PORT}`);
   console.log(`📋 Health: http://localhost:${PORT}/api/health\n`);
 });
+
