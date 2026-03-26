@@ -13,7 +13,9 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
   'https://skyflightsbooking.netlify.app',
-  'https://skkyflights.netlify.app'
+  'https://skkyflights.netlify.app',
+  'https://punedeveloper.in',
+
 ];
 
 // ✅ CORS Setup (FINAL FIX)
